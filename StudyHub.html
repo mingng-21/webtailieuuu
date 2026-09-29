@@ -1,0 +1,2661 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>StudyMate Pro</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --primary:#4f46e5;
+    --primary2:#7c3aed;
+    --blue:#2563eb;
+    --green:#10b981;
+    --orange:#f59e0b;
+    --red:#ef4444;
+    --pink:#ec4899;
+    --bg:#f5f7fb;
+    --card:#fff;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+header{
+    height:70px;
+    background:linear-gradient(135deg,var(--primary),var(--primary2));
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    box-shadow:0 4px 15px rgba(0,0,0,.12);
+}
+
+.logo{
+    font-size:24px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#fde68a;
+}
+
+.header-badge{
+    background:rgba(255,255,255,.15);
+    padding:9px 15px;
+    border-radius:30px;
+    font-size:13px;
+}
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 70px);
+}
+
+.sidebar{
+    width:250px;
+    background:#fff;
+    border-right:1px solid var(--border);
+    padding:18px 12px;
+    position:sticky;
+    top:70px;
+    height:calc(100vh - 70px);
+    overflow:auto;
+}
+
+.menu-title{
+    color:#9ca3af;
+    font-size:11px;
+    font-weight:bold;
+    margin:18px 10px 7px;
+    letter-spacing:.8px;
+}
+
+.menu-btn{
+    width:100%;
+    border:0;
+    background:transparent;
+    padding:12px 13px;
+    text-align:left;
+    border-radius:10px;
+    margin-bottom:4px;
+    cursor:pointer;
+    color:#4b5563;
+    font-size:14px;
+}
+
+.menu-btn:hover{
+    background:#eef2ff;
+    color:var(--primary);
+}
+
+.menu-btn.active{
+    background:#eef2ff;
+    color:var(--primary);
+    font-weight:bold;
+}
+
+main{
+    flex:1;
+    padding:30px;
+    max-width:1500px;
+    width:100%;
+    margin:auto;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-title{
+    margin-bottom:25px;
+}
+
+.page-title h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.page-title p{
+    color:var(--muted);
+    line-height:1.6;
+}
+
+.card{
+    background:#fff;
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 4px 18px rgba(0,0,0,.05);
+}
+
+.card-title{
+    font-size:19px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+textarea,
+input,
+select{
+    font-family:inherit;
+}
+
+textarea{
+    width:100%;
+    min-height:250px;
+    resize:vertical;
+    border:1px solid #d1d5db;
+    border-radius:11px;
+    padding:15px;
+    font-size:15px;
+    line-height:1.7;
+    outline:none;
+}
+
+textarea:focus,
+input:focus,
+select:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px #e0e7ff;
+}
+
+input,
+select{
+    padding:12px 14px;
+    border:1px solid #d1d5db;
+    border-radius:9px;
+    outline:none;
+    background:#fff;
+}
+
+.search{
+    width:100%;
+}
+
+.button-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    margin-top:14px;
+}
+
+.btn{
+    border:0;
+    border-radius:9px;
+    padding:11px 16px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:white;
+}
+
+.btn-primary:hover{
+    background:#4338ca;
+}
+
+.btn-secondary{
+    background:#eef2ff;
+    color:var(--primary);
+}
+
+.btn-green{
+    background:#dcfce7;
+    color:#047857;
+}
+
+.btn-red{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.output{
+    background:#f8fafc;
+    border:1px solid var(--border);
+    border-radius:11px;
+    padding:18px;
+    line-height:1.8;
+}
+
+.empty{
+    color:#9ca3af;
+    text-align:center;
+    padding:30px;
+}
+
+/* HOME */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:22px;
+}
+
+.stat{
+    background:#fff;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.stat-icon{
+    font-size:28px;
+}
+
+.stat-number{
+    font-size:25px;
+    font-weight:bold;
+    color:var(--primary);
+    margin-top:7px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:4px;
+}
+
+.feature-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+.feature{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:21px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.feature:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.feature-icon{
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.feature h3{
+    margin-bottom:8px;
+}
+
+.feature p{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.6;
+}
+
+/* TABS */
+
+.tabs{
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+}
+
+.tab{
+    border:0;
+    padding:10px 17px;
+    border-radius:9px;
+    background:#f3f4f6;
+    color:#4b5563;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.tab.active{
+    background:var(--primary);
+    color:#fff;
+}
+
+/* FORMULA */
+
+.formula-group{
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:13px;
+    overflow:hidden;
+    background:#fff;
+}
+
+.formula-header{
+    width:100%;
+    border:0;
+    background:#fff;
+    padding:17px 19px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+    text-align:left;
+}
+
+.formula-header:hover{
+    background:#fafaff;
+}
+
+.formula-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.formula-icon{
+    width:43px;
+    height:43px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#eef2ff;
+    border-radius:11px;
+    font-size:21px;
+}
+
+.formula-grade{
+    color:var(--primary);
+    font-size:11px;
+    font-weight:bold;
+}
+
+.formula-title{
+    font-size:16px;
+    font-weight:bold;
+    margin-top:3px;
+}
+
+.arrow{
+    transition:.2s;
+}
+
+.formula-group.open .arrow{
+    transform:rotate(180deg);
+}
+
+.formula-content{
+    display:none;
+    padding:0 18px 18px;
+    background:#fafbff;
+}
+
+.formula-group.open .formula-content{
+    display:block;
+}
+
+.formula-item{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:16px;
+    margin-top:11px;
+}
+
+.formula-name{
+    color:var(--primary);
+    font-weight:bold;
+    margin-bottom:9px;
+}
+
+.formula-box{
+    background:#f5f3ff;
+    color:#5b21b6;
+    border-radius:8px;
+    padding:12px;
+    font-size:17px;
+    font-weight:bold;
+    overflow:auto;
+    margin-bottom:11px;
+}
+
+.exercise{
+    background:#f0fdf4;
+    border-radius:8px;
+    padding:12px;
+    line-height:1.6;
+}
+
+.answer{
+    display:none;
+    background:#dcfce7;
+    color:#047857;
+    padding:10px;
+    border-radius:8px;
+    margin-top:9px;
+}
+
+.answer.show{
+    display:block;
+}
+
+.answer-btn{
+    border:0;
+    background:#bbf7d0;
+    color:#047857;
+    padding:7px 10px;
+    border-radius:7px;
+    margin-top:8px;
+    cursor:pointer;
+}
+
+/* DIAGRAM */
+
+.diagram-types{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.diagram-type{
+    padding:15px;
+    border:2px solid var(--border);
+    background:white;
+    border-radius:12px;
+    cursor:pointer;
+    text-align:center;
+}
+
+.diagram-type.active{
+    border-color:var(--primary);
+    background:#eef2ff;
+    color:var(--primary);
+    font-weight:bold;
+}
+
+.diagram-area{
+    min-height:620px;
+    position:relative;
+    overflow:auto;
+    border-radius:15px;
+    border:2px solid #dbe3f0;
+    background-color:#f8fbff;
+    background-image:radial-gradient(#cbd5e1 1px,transparent 1px);
+    background-size:20px 20px;
+    padding:25px;
+}
+
+/* CIRCLE MAP */
+
+.circle-map{
+    min-width:900px;
+    min-height:550px;
+    position:relative;
+}
+
+.circle-center{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    background:#6366f1;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:30px;
+    font-weight:bold;
+    z-index:3;
+    box-shadow:0 8px 25px rgba(79,70,229,.25);
+}
+
+.circle-context{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:510px;
+    height:510px;
+    border:3px solid #93c5fd;
+    border-radius:50%;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding-top:8px;
+    color:#2563eb;
+    font-weight:bold;
+}
+
+/* BUBBLE */
+
+.bubble-map{
+    min-width:850px;
+    min-height:550px;
+    position:relative;
+}
+
+.bubble{
+    position:absolute;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+    color:white;
+    font-weight:bold;
+    box-shadow:0 5px 15px rgba(0,0,0,.13);
+}
+
+/* TREE */
+
+.tree-map{
+    min-width:900px;
+    min-height:550px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.tree-root{
+    background:#4f46e5;
+    color:white;
+    padding:16px 28px;
+    border-radius:30px;
+    font-weight:bold;
+    margin-bottom:40px;
+}
+
+.tree-level{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.tree-node{
+    background:white;
+    border:2px solid #6366f1;
+    border-radius:12px;
+    padding:15px;
+    min-width:150px;
+    max-width:220px;
+    text-align:center;
+}
+
+/* FLOW */
+
+.flow-map{
+    min-width:900px;
+    min-height:500px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:0;
+}
+
+.flow-node{
+    background:white;
+    border:3px solid #6366f1;
+    padding:18px;
+    min-width:150px;
+    text-align:center;
+    border-radius:12px;
+}
+
+.flow-arrow{
+    font-size:30px;
+    color:#6366f1;
+}
+
+/* BRACE */
+
+.brace-map{
+    min-width:850px;
+    min-height:500px;
+    padding:40px;
+}
+
+.brace-root{
+    background:#4f46e5;
+    color:white;
+    padding:20px;
+    width:220px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.brace-children{
+    display:flex;
+    gap:15px;
+    margin-top:25px;
+    padding-left:80px;
+}
+
+.brace-child{
+    background:white;
+    border:2px solid #ec4899;
+    border-radius:10px;
+    padding:15px;
+    min-width:150px;
+}
+
+/* PRACTICE */
+
+.practice-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:17px;
+    margin-bottom:12px;
+}
+
+.question-number{
+    color:var(--primary);
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.practice-answer{
+    display:none;
+    background:#f0fdf4;
+    color:#047857;
+    padding:10px;
+    border-radius:8px;
+    margin-top:10px;
+}
+
+.practice-answer.show{
+    display:block;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .feature-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .diagram-types{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:700px){
+
+    header{
+        padding:0 15px;
+    }
+
+    .header-badge{
+        display:none;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    main{
+        padding:17px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .feature-grid{
+        grid-template-columns:1fr;
+    }
+
+    .diagram-types{
+        grid-template-columns:1fr;
+    }
+
+    .page-title h1{
+        font-size:25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🧠 Study<span>Mate Pro</span></div>
+
+    <div class="header-badge">
+        📚 Học tập thông minh
+    </div>
+</header>
+
+
+<div class="layout">
+
+<aside class="sidebar">
+
+    <div class="menu-title">HỌC TẬP</div>
+
+    <button class="menu-btn active"
+        onclick="showPage('home',this)">
+        🏠 Trang chủ
+    </button>
+
+    <button class="menu-btn"
+        onclick="showPage('summary',this)">
+        ✨ Tóm tắt bài học
+    </button>
+
+    <button class="menu-btn"
+        onclick="showPage('questions',this)">
+        ❓ Đặt câu hỏi từ văn bản
+    </button>
+
+    <button class="menu-btn"
+        onclick="showPage('diagram',this)">
+        🧠 Sơ đồ tư duy
+    </button>
+
+    <div class="menu-title">TOÁN 10–12</div>
+
+    <button class="menu-btn"
+        onclick="showPage('formulas',this)">
+        📐 Kho công thức
+    </button>
+
+    <button class="menu-btn"
+        onclick="showPage('practice',this)">
+        📝 Câu hỏi rèn luyện
+    </button>
+
+    <div class="menu-title">DỮ LIỆU</div>
+
+    <button class="menu-btn"
+        onclick="showPage('saved',this)">
+        💾 Bài đã lưu
+    </button>
+
+</aside>
+
+
+<main>
+
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+    <div class="page-title">
+        <h1>Xin chào! 👋</h1>
+
+        <p>
+            Một không gian học tập tổng hợp:
+            tóm tắt, đặt câu hỏi, tạo sơ đồ tư duy
+            và ôn tập Toán 10–12.
+        </p>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="stat-icon">📚</div>
+            <div class="stat-number" id="savedCount">0</div>
+            <div class="stat-label">Bài đã lưu</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">📐</div>
+            <div class="stat-number" id="formulaCount">0</div>
+            <div class="stat-label">Công thức</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">📝</div>
+            <div class="stat-number" id="practiceCount">0</div>
+            <div class="stat-label">Câu luyện tập</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-icon">🧠</div>
+            <div class="stat-number">6</div>
+            <div class="stat-label">Loại sơ đồ</div>
+        </div>
+
+    </div>
+
+
+    <div class="feature-grid">
+
+        <div class="feature"
+            onclick="openPage('summary')">
+
+            <div class="feature-icon">✨</div>
+
+            <h3>Tóm tắt bài học</h3>
+
+            <p>
+                Dán nội dung bài học của nhiều môn
+                để lấy các ý chính.
+            </p>
+
+        </div>
+
+
+        <div class="feature"
+            onclick="openPage('questions')">
+
+            <div class="feature-icon">❓</div>
+
+            <h3>Đặt câu hỏi</h3>
+
+            <p>
+                Tạo câu hỏi ôn tập dựa trên văn bản.
+            </p>
+
+        </div>
+
+
+        <div class="feature"
+            onclick="openPage('diagram')">
+
+            <div class="feature-icon">🧠</div>
+
+            <h3>Sơ đồ tư duy</h3>
+
+            <p>
+                Mind Map, Circle Map, Bubble Map,
+                Tree Map, Flow Map, Brace Map.
+            </p>
+
+        </div>
+
+
+        <div class="feature"
+            onclick="openPage('formulas')">
+
+            <div class="feature-icon">📐</div>
+
+            <h3>Công thức Toán 10–12</h3>
+
+            <p>
+                Công thức được gom theo từng
+                chủ đề kiến thức liên quan.
+            </p>
+
+        </div>
+
+
+        <div class="feature"
+            onclick="openPage('practice')">
+
+            <div class="feature-icon">📝</div>
+
+            <h3>Rèn luyện</h3>
+
+            <p>
+                Câu hỏi và đáp án riêng cho
+                từng khối lớp.
+            </p>
+
+        </div>
+
+
+        <div class="feature"
+            onclick="openPage('saved')">
+
+            <div class="feature-icon">💾</div>
+
+            <h3>Bài đã lưu</h3>
+
+            <p>
+                Lưu nội dung ngay trên trình duyệt.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- SUMMARY -->
+
+<section id="summary" class="page">
+
+    <div class="page-title">
+
+        <h1>✨ Tóm tắt bài học</h1>
+
+        <p>
+            Có thể sử dụng cho Văn, Toán, Lý,
+            Hóa, Sinh, Sử, Địa...
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            📖 Nội dung bài học
+        </div>
+
+        <textarea id="summaryInput"
+            placeholder="Dán nội dung bài học vào đây..."></textarea>
+
+        <div class="button-row">
+
+            <button class="btn btn-primary"
+                onclick="summarize()">
+                ✨ Tóm tắt
+            </button>
+
+            <button class="btn btn-secondary"
+                onclick="sendMindmap()">
+                🧠 Chuyển sang sơ đồ
+            </button>
+
+            <button class="btn btn-secondary"
+                onclick="sendQuestion()">
+                ❓ Tạo câu hỏi
+            </button>
+
+            <button class="btn btn-green"
+                onclick="saveContent('summaryInput')">
+                💾 Lưu
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-title">
+            📌 Kết quả
+        </div>
+
+        <div id="summaryOutput" class="output">
+
+            <div class="empty">
+                Chưa có kết quả.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- QUESTIONS FROM TEXT -->
+
+<section id="questions" class="page">
+
+    <div class="page-title">
+
+        <h1>❓ Đặt câu hỏi từ văn bản</h1>
+
+        <p>
+            Dán văn bản để tạo các dạng câu hỏi
+            tự kiểm tra kiến thức.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <textarea id="questionInput"
+            placeholder="Dán bài học hoặc văn bản vào đây..."></textarea>
+
+        <div class="button-row">
+
+            <button class="btn btn-primary"
+                onclick="generateQuestions()">
+                ❓ Tạo câu hỏi
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div id="questionOutput" class="output">
+
+            <div class="empty">
+                Chưa có câu hỏi.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- DIAGRAM -->
+
+<section id="diagram" class="page">
+
+    <div class="page-title">
+
+        <h1>🧠 Trình tạo sơ đồ tư duy</h1>
+
+        <p>
+            Chọn loại sơ đồ và nhập nội dung.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="diagram-types">
+
+            <button class="diagram-type active"
+                onclick="chooseDiagram('mind',this)">
+                🧠 Mind Map
+            </button>
+
+            <button class="diagram-type"
+                onclick="chooseDiagram('circle',this)">
+                ⭕ Circle Map
+            </button>
+
+            <button class="diagram-type"
+                onclick="chooseDiagram('bubble',this)">
+                🫧 Bubble Map
+            </button>
+
+            <button class="diagram-type"
+                onclick="chooseDiagram('tree',this)">
+                🌳 Tree Map
+            </button>
+
+            <button class="diagram-type"
+                onclick="chooseDiagram('flow',this)">
+                ➡️ Flow Map
+            </button>
+
+            <button class="diagram-type"
+                onclick="chooseDiagram('brace',this)">
+                🔖 Brace Map
+            </button>
+
+        </div>
+
+
+        <input id="diagramTitle"
+            class="search"
+            placeholder="Tên chủ đề / bài học...">
+
+
+        <textarea id="diagramInput"
+            style="margin-top:12px"
+            placeholder="Dán nội dung bài học vào đây..."></textarea>
+
+
+        <div class="button-row">
+
+            <button class="btn btn-primary"
+                onclick="createDiagram()">
+                🧠 Tạo sơ đồ
+            </button>
+
+            <button class="btn btn-green"
+                onclick="saveDiagram()">
+                💾 Lưu sơ đồ
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div id="diagramOutput"
+            class="diagram-area">
+
+            <div class="empty">
+                Sơ đồ sẽ xuất hiện tại đây.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FORMULAS -->
+
+<section id="formulas" class="page">
+
+    <div class="page-title">
+
+        <h1>📐 Kho công thức Toán 10–12</h1>
+
+        <p>
+            Công thức được phân loại theo khối.
+            Các công thức liên quan được gom chung
+            vào một mục. Bấm mục để mở.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="tabs">
+
+            <button class="tab active"
+                onclick="chooseGrade(10,this)">
+                Toán 10
+            </button>
+
+            <button class="tab"
+                onclick="chooseGrade(11,this)">
+                Toán 11
+            </button>
+
+            <button class="tab"
+                onclick="chooseGrade(12,this)">
+                Toán 12
+            </button>
+
+        </div>
+
+        <input id="formulaSearch"
+            class="search"
+            placeholder="🔎 Tìm công thức..."
+            oninput="searchFormula()">
+
+    </div>
+
+
+    <div id="formulaContainer"></div>
+
+</section>
+
+
+<!-- PRACTICE -->
+
+<section id="practice" class="page">
+
+    <div class="page-title">
+
+        <h1>📝 Câu hỏi rèn luyện</h1>
+
+        <p>
+            Chọn khối lớp để luyện tập.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div class="tabs">
+
+            <button class="tab active"
+                onclick="choosePractice(10,this)">
+                Toán 10
+            </button>
+
+            <button class="tab"
+                onclick="choosePractice(11,this)">
+                Toán 11
+            </button>
+
+            <button class="tab"
+                onclick="choosePractice(12,this)">
+                Toán 12
+            </button>
+
+        </div>
+
+        <div id="practiceContainer"></div>
+
+    </div>
+
+</section>
+
+
+<!-- SAVED -->
+
+<section id="saved" class="page">
+
+    <div class="page-title">
+
+        <h1>💾 Bài đã lưu</h1>
+
+        <p>
+            Dữ liệu được lưu ngay trên trình duyệt.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <div id="savedContainer"></div>
+
+    </div>
+
+</section>
+
+
+</main>
+</div>
+
+
+<script>
+
+/* =====================================================
+   DATABASE CÔNG THỨC
+===================================================== */
+
+const formulas = {
+
+10:[
+
+{
+icon:"🔢",
+title:"Mệnh đề – Tập hợp",
+items:[
+
+["Giao hai tập hợp",
+"A ∩ B = {x | x ∈ A và x ∈ B}",
+"A={1,2,3}, B={2,3,4}. Tìm A∩B.",
+"A∩B={2,3}."],
+
+["Hợp hai tập hợp",
+"A ∪ B = {x | x ∈ A hoặc x ∈ B}",
+"A={1,2}, B={2,3}. Tìm A∪B.",
+"A∪B={1,2,3}."],
+
+["Hiệu hai tập hợp",
+"A \\ B = {x | x∈A và x∉B}",
+"A={1,2,3}, B={2,4}. Tìm A\\B.",
+"A\\B={1,3}."]
+
+]},
+
+{
+icon:"📈",
+title:"Hàm số – Hàm số bậc hai",
+items:[
+
+["Hàm số bậc nhất",
+"y=ax+b, a≠0",
+"Xác định hệ số góc của y=3x-2.",
+"3."],
+
+["Hàm số bậc hai",
+"y=ax²+bx+c, a≠0",
+"Xác định a,b,c của y=2x²-3x+1.",
+"a=2,b=-3,c=1."],
+
+["Biệt thức Delta",
+"Δ=b²-4ac",
+"Tính Δ của 2x²-3x+1=0.",
+"Δ=1."],
+
+["Nghiệm phương trình bậc hai",
+"x=(-b±√Δ)/(2a)",
+"Giải x²-5x+6=0.",
+"x=2 hoặc x=3."],
+
+["Tọa độ đỉnh",
+"I(-b/(2a); -Δ/(4a))",
+"Tìm đỉnh y=x²-4x+3.",
+"I(2;-1)."],
+
+["Trục đối xứng",
+"x=-b/(2a)",
+"Tìm trục đối xứng y=x²-6x+2.",
+"x=3."]
+
+]},
+
+{
+icon:"📐",
+title:"Vectơ – Tọa độ",
+items:[
+
+["Tọa độ vectơ",
+"AB⃗=(xB-xA ; yB-yA)",
+"A(1,2), B(4,6). Tính AB⃗.",
+"AB⃗=(3;4)."],
+
+["Độ dài vectơ",
+"|a⃗|=√(x²+y²)",
+"Tính độ dài (3;4).",
+"5."],
+
+["Khoảng cách hai điểm",
+"AB=√[(xB-xA)²+(yB-yA)²]",
+"A(0,0),B(3,4). Tính AB.",
+"5."],
+
+["Tích vô hướng",
+"a⃗·b⃗=x₁x₂+y₁y₂",
+"a=(1,2),b=(3,4). Tính a·b.",
+"11."]
+
+]},
+
+{
+icon:"📊",
+title:"Thống kê",
+items:[
+
+["Số trung bình",
+"x̄=(x₁+...+xₙ)/n",
+"Tính trung bình 2,4,6,8.",
+"5."],
+
+["Phương sai",
+"s²=Σ(xᵢ-x̄)²/n",
+"Tính phương sai của 1,2,3.",
+"2/3."],
+
+["Độ lệch chuẩn",
+"s=√s²",
+"Nếu phương sai bằng 9.",
+"s=3."]
+
+]},
+
+{
+icon:"🎲",
+title:"Tổ hợp – Xác suất cơ bản",
+items:[
+
+["Giai thừa",
+"n!=1·2·3·...·n",
+"Tính 5!.",
+"120."],
+
+["Tổ hợp",
+"C(n,k)=n!/[k!(n-k)!]",
+"Tính C(5,2).",
+"10."],
+
+["Xác suất cổ điển",
+"P(A)=n(A)/n(Ω)",
+"Gieo xúc xắc. Xác suất ra 6?",
+"1/6."]
+
+]}
+
+],
+
+
+11:[
+
+{
+icon:"📐",
+title:"Lượng giác",
+items:[
+
+["Hệ thức cơ bản",
+"sin²x+cos²x=1",
+"sinx=3/5, x nhọn. Tính cosx.",
+"4/5."],
+
+["Tang",
+"tanx=sinx/cosx",
+"sinx=3/5,cosx=4/5. Tính tanx.",
+"3/4."],
+
+["Cotang",
+"cotx=cosx/sinx",
+"sinx=3/5,cosx=4/5.",
+"4/3."],
+
+["Sin tổng",
+"sin(a+b)=sina.cosb+cosa.sinb",
+"Viết công thức sin(a+b).",
+"sin(a+b)=sina.cosb+cosa.sinb."],
+
+["Cos tổng",
+"cos(a+b)=cosa.cosb-sina.sinb",
+"Viết công thức cos(a+b).",
+"cos(a+b)=cosa.cosb-sina.sinb."],
+
+["Tan tổng",
+"tan(a+b)=(tana+tanb)/(1-tana.tanb)",
+"Viết công thức tan(a+b).",
+"tan(a+b)=(tana+tanb)/(1-tana.tanb)."]
+
+]},
+
+{
+icon:"🔢",
+title:"Dãy số – Cấp số cộng – Cấp số nhân",
+items:[
+
+["Cấp số cộng",
+"uₙ=u₁+(n-1)d",
+"u₁=2,d=3. Tính u₅.",
+"14."],
+
+["Tổng cấp số cộng",
+"Sₙ=n(u₁+uₙ)/2",
+"Tính 1+2+...+10.",
+"55."],
+
+["Cấp số nhân",
+"uₙ=u₁qⁿ⁻¹",
+"u₁=2,q=3. Tính u₄.",
+"54."],
+
+["Tổng cấp số nhân",
+"Sₙ=u₁(qⁿ-1)/(q-1), q≠1",
+"Tính 1+2+4+8+16.",
+"31."]
+
+]},
+
+{
+icon:"📈",
+title:"Giới hạn – Đạo hàm",
+items:[
+
+["Đạo hàm lũy thừa",
+"(xⁿ)'=nxⁿ⁻¹",
+"Tính (x⁵)'.",
+"5x⁴."],
+
+["Đạo hàm tổng",
+"(u+v)'=u'+v'",
+"Tính (x²+x³)'.",
+"2x+3x²."],
+
+["Đạo hàm tích",
+"(uv)'=u'v+uv'",
+"Viết công thức.",
+"(uv)'=u'v+uv'."],
+
+["Đạo hàm thương",
+"(u/v)'=(u'v-uv')/v²",
+"Viết công thức.",
+"(u/v)'=(u'v-uv')/v²."]
+
+]},
+
+{
+icon:"📦",
+title:"Quan hệ vuông góc không gian",
+items:[
+
+["Đường thẳng vuông góc mặt phẳng",
+"d⊥(P) khi d⊥ hai đường thẳng cắt nhau trong (P)",
+"Muốn chứng minh d⊥(P) cần chứng minh gì?",
+"d vuông góc với hai đường thẳng cắt nhau thuộc (P)."],
+
+["Hai mặt phẳng vuông góc",
+"(P)⊥(Q) ⇔ góc giữa hai mặt phẳng bằng 90°",
+"Hai mặt phẳng vuông góc tạo góc bao nhiêu?",
+"90°."]
+]}
+
+],
+
+
+12:[
+
+{
+icon:"📈",
+title:"Ứng dụng đạo hàm",
+items:[
+
+["Đồng biến",
+"f'(x)>0 ⇒ f tăng",
+"Nếu f'(x)>0 trên I?",
+"Hàm số đồng biến trên I."],
+
+["Nghịch biến",
+"f'(x)<0 ⇒ f giảm",
+"Nếu f'(x)<0 trên I?",
+"Hàm số nghịch biến trên I."],
+
+["Điểm cực trị",
+"f'(x₀)=0 và f' đổi dấu",
+"Nêu cách tìm cực trị.",
+"Tìm nghiệm f'(x)=0 rồi xét dấu đạo hàm."]
+
+]},
+
+{
+icon:"🔢",
+title:"Hàm số mũ – Logarit",
+items:[
+
+["Đạo hàm hàm mũ",
+"(aˣ)'=aˣln a",
+"Tính (2ˣ)'.",
+"2ˣln2."],
+
+["Đạo hàm ln",
+"(lnx)'=1/x",
+"Tính (lnx)'.",
+"1/x."],
+
+["Logarit tích",
+"logₐ(xy)=logₐx+logₐy",
+"Tính log₂(8×4).",
+"5."],
+
+["Logarit thương",
+"logₐ(x/y)=logₐx-logₐy",
+"Viết công thức.",
+"logₐ(x/y)=logₐx-logₐy."],
+
+["Logarit lũy thừa",
+"logₐ(xⁿ)=nlogₐx",
+"Tính log₂(8²).",
+"6."]
+
+]},
+
+{
+icon:"∫",
+title:"Nguyên hàm – Tích phân",
+items:[
+
+["Nguyên hàm lũy thừa",
+"∫xⁿdx=xⁿ⁺¹/(n+1)+C, n≠-1",
+"Tính ∫x²dx.",
+"x³/3+C."],
+
+["Nguyên hàm 1/x",
+"∫dx/x=ln|x|+C",
+"Tính ∫dx/x.",
+"ln|x|+C."],
+
+["Tích phân",
+"∫ₐᵇf(x)dx=F(b)-F(a)",
+"Tính ∫₀¹2x dx.",
+"1."],
+
+["Đổi biến",
+"∫f(u)u'dx=∫f(u)du",
+"Nêu ý nghĩa.",
+"Đưa tích phân về biến mới u."]
+
+]},
+
+{
+icon:"🔷",
+title:"Số phức",
+items:[
+
+["Dạng đại số",
+"z=a+bi",
+"Phần thực của 3+4i?",
+"3."],
+
+["Môđun",
+"|z|=√(a²+b²)",
+"Tính |3+4i|.",
+"5."],
+
+["Số phức liên hợp",
+"z̄=a-bi",
+"Tìm liên hợp 2-3i.",
+"2+3i."],
+
+["Tích số phức và liên hợp",
+"z·z̄=|z|²",
+"Nếu |z|=5 thì z·z̄ bằng?",
+"25."]
+
+]},
+
+{
+icon:"📐",
+title:"Hình học Oxyz",
+items:[
+
+["Khoảng cách hai điểm",
+"AB=√[(xB-xA)²+(yB-yA)²+(zB-zA)²]",
+"A(0,0,0),B(1,2,2).",
+"AB=3."],
+
+["Mặt phẳng",
+"(P):ax+by+cz+d=0",
+"Vectơ pháp tuyến?",
+"n⃗=(a,b,c)."],
+
+["Khoảng cách điểm đến mặt phẳng",
+"d=|ax₀+by₀+cz₀+d|/√(a²+b²+c²)",
+"Nêu công thức.",
+"Thay tọa độ điểm vào công thức trên."]
+
+]},
+
+{
+icon:"🎲",
+title:"Xác suất",
+items:[
+
+["Xác suất biến cố đối",
+"P(Ā)=1-P(A)",
+"P(A)=0,3. Tính P(Ā).",
+"0,7."],
+
+["Xác suất hợp",
+"P(A∪B)=P(A)+P(B)-P(A∩B)",
+"Viết công thức.",
+"P(A∪B)=P(A)+P(B)-P(A∩B)."],
+
+["Xác suất có điều kiện",
+"P(A|B)=P(A∩B)/P(B)",
+"Nêu công thức.",
+"P(A|B)=P(A∩B)/P(B), P(B)>0."]
+
+]}
+
+]};
+
+
+/* =====================================================
+   CÂU HỎI RÈN LUYỆN
+===================================================== */
+
+const practice = {
+
+10:[
+["Giải x²-5x+6=0.","x=2 hoặc x=3."],
+["Tìm đỉnh của y=x²-4x+3.","I(2;-1)."],
+["Tính độ dài AB với A(0,0), B(3,4).","AB=5."],
+["Tính C(5,2).","10."],
+["Tính trung bình 2,4,6,8.","5."]
+],
+
+11:[
+["sinx=3/5, x nhọn. Tính cosx.","4/5."],
+["u₁=2,d=3. Tính u₆.","17."],
+["u₁=2,q=3. Tính u₄.","54."],
+["Tính đạo hàm x⁴.","4x³."],
+["Tính đạo hàm x²+3x.","2x+3."]
+],
+
+12:[
+["Tính đạo hàm x³+2x.","3x²+2."],
+["Tính ∫x²dx.","x³/3+C."],
+["Tính ∫₀¹2x dx.","1."],
+["Tính |3+4i|.","5."],
+["P(A)=0,3. Tính P(Ā).","0,7."],
+["A(0,0,0), B(1,2,2). Tính AB.","3."]
+]};
+
+
+/* =====================================================
+   BIẾN
+===================================================== */
+
+let currentGrade=10;
+
+let currentPracticeGrade=10;
+
+let currentDiagram="mind";
+
+
+/* =====================================================
+   ĐIỀU HƯỚNG
+===================================================== */
+
+function showPage(id,button){
+
+    document.querySelectorAll(".page")
+        .forEach(p=>p.classList.remove("active"));
+
+    document.getElementById(id)
+        .classList.add("active");
+
+    document.querySelectorAll(".menu-btn")
+        .forEach(b=>b.classList.remove("active"));
+
+    if(button) button.classList.add("active");
+
+    window.scrollTo(0,0);
+}
+
+function openPage(id){
+
+    document.querySelectorAll(".page")
+        .forEach(p=>p.classList.remove("active"));
+
+    document.getElementById(id)
+        .classList.add("active");
+
+    window.scrollTo(0,0);
+}
+
+
+/* =====================================================
+   TÓM TẮT
+===================================================== */
+
+function summarize(){
+
+    const text=
+        document.getElementById("summaryInput")
+        .value.trim();
+
+    if(!text){
+        alert("Hãy nhập bài học.");
+        return;
+    }
+
+    const sentences=
+        splitSentences(text);
+
+    const selected=
+        sentences.slice(0,10);
+
+    let html="<h3>📌 Các ý chính</h3><br>";
+
+    selected.forEach((s,i)=>{
+
+        html+=`
+        <p style="margin-bottom:9px">
+            <b>${i+1}.</b>
+            ${escapeHTML(s)}
+        </p>`;
+    });
+
+    html+=`
+    <br>
+    <div style="
+        background:#eef2ff;
+        padding:13px;
+        border-radius:9px">
+        💡 <b>Gợi ý học:</b>
+        Xác định khái niệm, đặc điểm,
+        nguyên nhân, diễn biến, kết quả,
+        công thức, ví dụ hoặc kết luận
+        quan trọng.
+    </div>`;
+
+    document.getElementById("summaryOutput")
+        .innerHTML=html;
+}
+
+
+/* =====================================================
+   TẠO CÂU HỎI TỪ VĂN BẢN
+===================================================== */
+
+function generateQuestions(){
+
+    const text=
+        document.getElementById("questionInput")
+        .value.trim();
+
+    if(!text){
+        alert("Hãy nhập văn bản.");
+        return;
+    }
+
+    const sentences=
+        splitSentences(text)
+        .filter(s=>s.length>15)
+        .slice(0,10);
+
+    let html="<h3>❓ Câu hỏi tự kiểm tra</h3><br>";
+
+    sentences.forEach((s,i)=>{
+
+        let q;
+
+        if(i%4===0){
+            q=`Nội dung chính của đoạn sau là gì? "${s}"`;
+        }
+        else if(i%4===1){
+            q=`Hãy giải thích ý nghĩa của nội dung: "${s}"`;
+        }
+        else if(i%4===2){
+            q=`Hãy nêu các thông tin quan trọng được đề cập trong: "${s}"`;
+        }
+        else{
+            q=`Từ nội dung trên, em có thể rút ra kết luận gì?`;
+        }
+
+        html+=`
+        <div class="practice-card">
+
+            <div class="question-number">
+                Câu ${i+1}
+            </div>
+
+            <div>
+                ${escapeHTML(q)}
+            </div>
+
+        </div>`;
+    });
+
+    document.getElementById("questionOutput")
+        .innerHTML=html;
+}
+
+
+/* =====================================================
+   CHUYỂN DỮ LIỆU
+===================================================== */
+
+function sendMindmap(){
+
+    document.getElementById("diagramInput")
+        .value=
+        document.getElementById("summaryInput")
+        .value;
+
+    openPage("diagram");
+}
+
+function sendQuestion(){
+
+    document.getElementById("questionInput")
+        .value=
+        document.getElementById("summaryInput")
+        .value;
+
+    openPage("questions");
+}
+
+
+/* =====================================================
+   TÁCH CÂU
+===================================================== */
+
+function splitSentences(text){
+
+    return text
+        .split(/[.!?。！？\n]+/)
+        .map(x=>x.trim())
+        .filter(x=>x.length>10);
+}
+
+
+/* =====================================================
+   DIAGRAM
+===================================================== */
+
+function chooseDiagram(type,button){
+
+    currentDiagram=type;
+
+    document.querySelectorAll(".diagram-type")
+        .forEach(b=>b.classList.remove("active"));
+
+    button.classList.add("active");
+}
+
+
+function createDiagram(){
+
+    const title=
+        document.getElementById("diagramTitle")
+        .value.trim() || "Bài học";
+
+    const text=
+        document.getElementById("diagramInput")
+        .value.trim();
+
+    if(!text){
+        alert("Hãy nhập nội dung.");
+        return;
+    }
+
+    const items=
+        splitSentences(text)
+        .slice(0,8);
+
+    let html="";
+
+    if(currentDiagram==="mind"){
+        html=createMindMap(title,items);
+    }
+
+    if(currentDiagram==="circle"){
+        html=createCircleMap(title,items);
+    }
+
+    if(currentDiagram==="bubble"){
+        html=createBubbleMap(title,items);
+    }
+
+    if(currentDiagram==="tree"){
+        html=createTreeMap(title,items);
+    }
+
+    if(currentDiagram==="flow"){
+        html=createFlowMap(title,items);
+    }
+
+    if(currentDiagram==="brace"){
+        html=createBraceMap(title,items);
+    }
+
+    document.getElementById("diagramOutput")
+        .innerHTML=html;
+}
+
+
+/* =====================================================
+   MIND MAP
+===================================================== */
+
+function createMindMap(title,items){
+
+    const colors=[
+        "#6366f1",
+        "#ec4899",
+        "#10b981",
+        "#f59e0b",
+        "#06b6d4",
+        "#8b5cf6"
+    ];
+
+    let branches="";
+
+    items.forEach((item,i)=>{
+
+        branches+=`
+        <div style="
+            background:white;
+            border-left:6px solid ${colors[i%colors.length]};
+            border-radius:12px;
+            padding:17px;
+            box-shadow:0 4px 12px rgba(0,0,0,.06)">
+            <b>${i+1}. ${escapeHTML(item)}</b>
+        </div>`;
+    });
+
+    return `
+    <div style="
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap:20px">
+
+        <div style="
+            background:linear-gradient(135deg,#4f46e5,#7c3aed);
+            color:white;
+            padding:20px 35px;
+            border-radius:50px;
+            font-size:20px;
+            font-weight:bold">
+            🧠 ${escapeHTML(title)}
+        </div>
+
+        <div style="
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:15px;
+            width:90%">
+            ${branches}
+        </div>
+
+    </div>`;
+}
+
+
+/* =====================================================
+   CIRCLE MAP
+===================================================== */
+
+function createCircleMap(title,items){
+
+    let html=`
+    <div class="circle-map">
+
+        <div class="circle-context">
+            Nội dung liên quan
+        </div>
+
+        <div class="circle-center">
+            ${escapeHTML(title)}
+        </div>`;
+
+    items.slice(0,6).forEach((item,i)=>{
+
+        const angle=(360/Math.max(items.length,1))*i;
+
+        const rad=angle*Math.PI/180;
+
+        const x=50+39*Math.cos(rad);
+        const y=50+39*Math.sin(rad);
+
+        html+=`
+        <div style="
+            position:absolute;
+            left:${x}%;
+            top:${y}%;
+            transform:translate(-50%,-50%);
+            background:#3b82f6;
+            color:white;
+            padding:12px;
+            border-radius:10px;
+            width:180px;
+            text-align:center">
+            ${escapeHTML(item)}
+        </div>`;
+    });
+
+    html+="</div>";
+
+    return html;
+}
+
+
+/* =====================================================
+   BUBBLE MAP
+===================================================== */
+
+function createBubbleMap(title,items){
+
+    let html=`
+    <div class="bubble-map">
+
+        <div class="bubble"
+            style="
+                width:190px;
+                height:190px;
+                background:#4f46e5;
+                left:42%;
+                top:35%">
+            ${escapeHTML(title)}
+        </div>`;
+
+    const positions=[
+        [8,10,"#ec4899"],
+        [68,8,"#10b981"],
+        [8,65,"#f59e0b"],
+        [70,65,"#06b6d4"],
+        [38,5,"#8b5cf6"],
+        [38,75,"#ef4444"]
+    ];
+
+    items.slice(0,6).forEach((item,i)=>{
+
+        const p=positions[i];
+
+        html+=`
+        <div class="bubble"
+            style="
+                width:135px;
+                height:135px;
+                left:${p[0]}%;
+                top:${p[1]}%;
+                background:${p[2]}">
+            ${escapeHTML(item)}
+        </div>`;
+    });
+
+    html+="</div>";
+
+    return html;
+}
+
+
+/* =====================================================
+   TREE MAP
+===================================================== */
+
+function createTreeMap(title,items){
+
+    let html=`
+    <div class="tree-map">
+
+        <div class="tree-root">
+            🌳 ${escapeHTML(title)}
+        </div>
+
+        <div class="tree-level">`;
+
+    items.forEach(item=>{
+
+        html+=`
+        <div class="tree-node">
+            ${escapeHTML(item)}
+        </div>`;
+    });
+
+    html+=`
+        </div>
+    </div>`;
+
+    return html;
+}
+
+
+/* =====================================================
+   FLOW MAP
+===================================================== */
+
+function createFlowMap(title,items){
+
+    let html=`
+    <div class="flow-map">`;
+
+    items.slice(0,6).forEach((item,i)=>{
+
+        if(i>0){
+            html+=`<div class="flow-arrow">→</div>`;
+        }
+
+        html+=`
+        <div class="flow-node">
+            ${i===0
+                ?escapeHTML(title)
+                :escapeHTML(item)}
+        </div>`;
+    });
+
+    html+="</div>";
+
+    return html;
+}
+
+
+/* =====================================================
+   BRACE MAP
+===================================================== */
+
+function createBraceMap(title,items){
+
+    let html=`
+    <div class="brace-map">
+
+        <div class="brace-root">
+            ${escapeHTML(title)}
+        </div>
+
+        <div class="brace-children">`;
+
+    items.forEach(item=>{
+
+        html+=`
+        <div class="brace-child">
+            ${escapeHTML(item)}
+        </div>`;
+    });
+
+    html+=`
+        </div>
+    </div>`;
+
+    return html;
+}
+
+
+/* =====================================================
+   LƯU SƠ ĐỒ
+===================================================== */
+
+function saveDiagram(){
+
+    const data={
+        title:
+            document.getElementById("diagramTitle").value,
+
+        text:
+            document.getElementById("diagramInput").value,
+
+        type:currentDiagram,
+
+        date:new Date().toLocaleString("vi-VN")
+    };
+
+    localStorage.setItem(
+        "studyMateDiagram",
+        JSON.stringify(data)
+    );
+
+    alert("✅ Đã lưu sơ đồ.");
+}
+
+
+/* =====================================================
+   CÔNG THỨC
+===================================================== */
+
+function chooseGrade(grade,button){
+
+    currentGrade=grade;
+
+    document.querySelectorAll("#formulas .tab")
+        .forEach(b=>b.classList.remove("active"));
+
+    button.classList.add("active");
+
+    document.getElementById("formulaSearch")
+        .value="";
+
+    renderFormulas();
+}
+
+
+function renderFormulas(data=formulas[currentGrade]){
+
+    const container=
+        document.getElementById("formulaContainer");
+
+    let html="";
+
+    data.forEach((group,index)=>{
+
+        html+=`
+        <div class="formula-group">
+
+            <button class="formula-header"
+                onclick="toggleFormula(this)">
+
+                <div class="formula-left">
+
+                    <div class="formula-icon">
+                        ${group.icon}
+                    </div>
+
+                    <div>
+
+                        <div class="formula-grade">
+                            TOÁN ${currentGrade}
+                        </div>
+
+                        <div class="formula-title">
+                            ${escapeHTML(group.title)}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <span class="arrow">▼</span>
+
+            </button>
+
+            <div class="formula-content">`;
+
+        group.items.forEach((item,j)=>{
+
+            const answerId=
+                "ans-"+currentGrade+"-"+index+"-"+j;
+
+            html+=`
+            <div class="formula-item">
+
+                <div class="formula-name">
+                    ${escapeHTML(item[0])}
+                </div>
+
+                <div class="formula-box">
+                    ${escapeHTML(item[1])}
+                </div>
+
+                <div class="exercise">
+
+                    <b>📝 Câu hỏi:</b>
+
+                    <br>
+
+                    ${escapeHTML(item[2])}
+
+                    <br>
+
+                    <button class="answer-btn"
+                        onclick="toggleAnswer('${answerId}')">
+
+                        👁 Xem đáp án
+
+                    </button>
+
+                    <div id="${answerId}"
+                        class="answer">
+
+                        <b>Đáp án:</b>
+                        ${escapeHTML(item[3])}
+
+                    </div>
+
+                </div>
+
+            </div>`;
+        });
+
+        html+=`
+            </div>
+        </div>`;
+    });
+
+    container.innerHTML=html;
+}
+
+
+function toggleFormula(button){
+
+    button.parentElement
+        .classList.toggle("open");
+}
+
+
+function toggleAnswer(id){
+
+    const el=document.getElementById(id);
+
+    if(el){
+        el.classList.toggle("show");
+    }
+}
+
+
+/* =====================================================
+   TÌM KIẾM CÔNG THỨC
+===================================================== */
+
+function searchFormula(){
+
+    const keyword=
+        document.getElementById("formulaSearch")
+        .value.toLowerCase().trim();
+
+    if(!keyword){
+        renderFormulas();
+        return;
+    }
+
+    const result=
+        formulas[currentGrade]
+        .map(group=>{
+
+            return {
+                ...group,
+                items:group.items.filter(item=>
+                    (
+                        group.title+
+                        " "+
+                        item.join(" ")
+                    )
+                    .toLowerCase()
+                    .includes(keyword)
+                )
+            };
+
+        })
+        .filter(group=>group.items.length);
+
+    renderFormulas(result);
+
+}
+
+
+/* =====================================================
+   CÂU HỎI RÈN LUYỆN
+===================================================== */
+
+function choosePractice(grade,button){
+
+    currentPracticeGrade=grade;
+
+    document.querySelectorAll("#practice .tab")
+        .forEach(b=>b.classList.remove("active"));
+
+    button.classList.add("active");
+
+    renderPractice();
+}
+
+
+function renderPractice(){
+
+    const data=
+        practice[currentPracticeGrade];
+
+    const container=
+        document.getElementById("practiceContainer");
+
+    let html="";
+
+    data.forEach((item,i)=>{
+
+        const id=
+            "practice-"+currentPracticeGrade+"-"+i;
+
+        html+=`
+        <div class="practice-card">
+
+            <div class="question-number">
+                Câu ${i+1}
+            </div>
+
+            <div>
+                ${escapeHTML(item[0])}
+            </div>
+
+            <button class="answer-btn"
+                onclick="toggleAnswer('${id}')">
+
+                👁 Xem đáp án
+
+            </button>
+
+            <div id="${id}"
+                class="practice-answer">
+
+                <b>Đáp án:</b>
+                ${escapeHTML(item[1])}
+
+            </div>
+
+        </div>`;
+    });
+
+    container.innerHTML=html;
+}
+
+
+/* =====================================================
+   LƯU NỘI DUNG
+===================================================== */
+
+function saveContent(id){
+
+    const text=
+        document.getElementById(id)
+        .value.trim();
+
+    if(!text){
+        alert("Không có nội dung.");
+        return;
+    }
+
+    const data=
+        JSON.parse(
+            localStorage.getItem("studySaved")
+            ||"[]"
+        );
+
+    data.unshift({
+
+        title:
+            text.substring(0,60),
+
+        content:text,
+
+        date:
+            new Date()
+            .toLocaleString("vi-VN")
+    });
+
+    localStorage.setItem(
+        "studySaved",
+        JSON.stringify(data)
+    );
+
+    renderSaved();
+
+    alert("✅ Đã lưu.");
+}
+
+
+/* =====================================================
+   HIỂN THỊ BÀI ĐÃ LƯU
+===================================================== */
+
+function renderSaved(){
+
+    const data=
+        JSON.parse(
+            localStorage.getItem("studySaved")
+            ||"[]"
+        );
+
+    document.getElementById("savedCount")
+        .textContent=data.length;
+
+    const box=
+        document.getElementById("savedContainer");
+
+    if(!data.length){
+
+        box.innerHTML=`
+        <div class="empty">
+            Chưa có bài nào được lưu.
+        </div>`;
+
+        return;
+    }
+
+    box.innerHTML=
+        data.map(item=>`
+
+        <div class="practice-card">
+
+            <b>📘 ${escapeHTML(item.title)}</b>
+
+            <div style="
+                color:#9ca3af;
+                font-size:12px;
+                margin:5px 0">
+
+                ${item.date}
+
+            </div>
+
+            <div style="
+                white-space:pre-wrap;
+                line-height:1.6">
+
+                ${escapeHTML(item.content)}
+
+            </div>
+
+        </div>
+
+        `).join("");
+}
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+function escapeHTML(text){
+
+    return String(text)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =====================================================
+   THỐNG KÊ
+===================================================== */
+
+function updateStats(){
+
+    let f=0;
+
+    [10,11,12].forEach(g=>{
+
+        formulas[g].forEach(group=>{
+
+            f+=group.items.length;
+
+        });
+
+    });
+
+    let q=0;
+
+    [10,11,12].forEach(g=>{
+
+        q+=practice[g].length;
+
+    });
+
+    document.getElementById("formulaCount")
+        .textContent=f;
+
+    document.getElementById("practiceCount")
+        .textContent=q;
+}
+
+
+/* =====================================================
+   KHỞI ĐỘNG
+===================================================== */
+
+renderFormulas();
+
+renderPractice();
+
+renderSaved();
+
+updateStats();
+
+</script>
+
+</body>
+</html>
